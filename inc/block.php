@@ -2,7 +2,7 @@
 
 class Block{
 	
-	public static function Create(string $name, string $title, string $description, bool $align)
+	public static function Create(string $name, string $title, string $description, bool $align, array $keywords, string $icon)
 	{
 		return  [
 			'name'              => $name,
@@ -10,7 +10,9 @@ class Block{
 			'description'       => __( $description ),
 			'render_template'   =>  Block::getPath($name),
 			'category'          => 'valrok',
-			'supports'  		=>array(
+			'icon'				=> $icon,
+			'keywords' 			=> $keywords,
+			'supports'  		=> array(
                 'align' => $align,
             ),
 		];

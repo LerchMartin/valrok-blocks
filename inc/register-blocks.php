@@ -5,13 +5,12 @@
  * @package Valrok Blocks
  */
 
-require_once(__DIR__ . '../block.php');
+require_once(WP_PLUGIN_DIR . '/valrok-blocks/inc/block.php');
 
 class ACFW_Register_Block {
 
 	function __construct() {
 		add_action('acf/init', [ $this, 'register_blocks' ] );
-		// add_action('admin_menu', 'settings');
 	}
 
 	public function register_blocks() {
@@ -20,18 +19,33 @@ class ACFW_Register_Block {
 			return;
 		}
 
-		$this -> registerAll(
-			array(
-				Block::Create('opening', 'OPENING', 'description', true),
-				Block::Create('testimonial', 'Testimonial', 'A custom testimonial block.', true)
-			)
+		$blocks = array(
+//   		                  Name        Title   Description   Align         Keywords            Icon
+			Block::Create('testimonial', 'Test', 'Description', true, ['keyword1', 'keyword2'], 'heading'),
 		);
+
+		$this -> registerAll($blocks);
+		$this -> importStyles($blocks);
 	}
 
 	function registerAll(Array $blocks){
 		foreach($blocks as $block){
 			acf_register_block_type($block);
 		}
+	}
+
+	function importStyles(Array $blocks){
+		
+		$importString = "";
+
+		foreach($blocks as $block){
+			$importString .= "@import '../../blocks/" . $block['name'] . "/" . $block['name'] . ".scss'; \r\n";
+		}
+
+		$stylePath = WP_PLUGIN_DIR . '/valrok-blocks/style/style_imports.scss';
+
+		file_put_contents($stylePath, $importString);
+
 	}
 }
 
